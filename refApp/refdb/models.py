@@ -138,7 +138,7 @@ class Player(models.Model):
     number = models.SmallIntegerField()
     fname = models.CharField(db_column='fName', max_length=45)  # Field name made lowercase.
     lname = models.CharField(db_column='lName', max_length=45)  # Field name made lowercase.
-    team_name = models.ForeignKey('Team', models.SET_DEFAULT, db_column='Team_name', default='none')  # Field name made lowercase.
+    team_name = models.ForeignKey('Team', models.PROTECT, db_column='Team_name')  # Field name made lowercase.
     age_group = models.CharField(db_column='age_group', choices=AGE_CHOICES, max_length=10)
     gender = models.CharField(db_column='gender', choices=GENDER_CHOICES, max_length=10)
     level = models.CharField(db_column='level', choices=LEVEL_CHOICES, max_length=10)
@@ -151,12 +151,11 @@ class State(models.Model):
     name = models.CharField(primary_key=True, max_length=50)
 
     class Meta:
-        managed = False
         db_table = 'state'
 
 class District(models.Model):
     name = models.CharField(primary_key=True, max_length=100)
-    state_name = models.ForeignKey('State', models.CASCADE, db_column='state_name')
+    state_name = models.ForeignKey(State, models.CASCADE, db_column='state_name')
 
     class Meta:
         db_table = 'district'
@@ -222,8 +221,8 @@ class Referee(Person):
 
 class League(models.Model):
     name = models.CharField(primary_key=True, max_length=50)
-    district_name = models.ForeignKey(District, models.CASCADE, related_name='league_district', db_column='District_name', primary_key=True)  # Field name made lowercase.
-    state_name = models.ForeignKey(District, models.CASCADE, db_column='State_name', primary_key=True)  # Field name made lowercase.
+    district_name = models.ForeignKey(District, models.CASCADE, related_name='league_district', db_column='District_name')  # Field name made lowercase.
+    state_name = models.ForeignKey(District, models.CASCADE, db_column='State_name')  # Field name made lowercase.
     primary_assignor = models.ForeignKey(Assignor, models.SET_NULL, db_column='primary_Assignor_Id', null=True)  # Field name made lowercase.
 
     class Meta:
@@ -272,30 +271,32 @@ class GameHasReferee(models.Model):
 
 class Goals(models.Model):
     game = models.ForeignKey(Game, models.CASCADE, db_column='Game_Id', primary_key=True)  # Field name made lowercase.
-    scoring_team = models.CharField(db_column='scoring_Team', max_length=45, primary_key=True)  # Field name made lowercase.
+    scoring_team = models.CharField(db_column='scoring_Team', max_length=45)  # Field name made lowercase.
     player_number = models.SmallIntegerField(db_column='Player_number')  # Field name made lowercase.
-    minute = models.SmallIntegerField(primary_key=True)
+    minute = models.SmallIntegerField()
 
     class Meta:
         db_table = 'goals'
+        unique_together = (('game', 'scoring_team', 'minute'),)
 
 
 class Guardians(models.Model):
     person = models.ForeignKey('Person', models.CASCADE, db_column='Person_Id', primary_key=True)  # Field name made lowercase.
-    fname = models.CharField(db_column='fName', max_length=45, primary_key=True)  # Field name made lowercase.
-    lname = models.CharField(db_column='lName', max_length=45, primary_key=True)  # Field name made lowercase.
+    fname = models.CharField(db_column='fName', max_length=45)  # Field name made lowercase.
+    lname = models.CharField(db_column='lName', max_length=45)  # Field name made lowercase.
     email = models.CharField(max_length=50)
     phone = models.CharField(max_length=15)
 
     class Meta:
         db_table = 'guardians'
+        unique_together = (('person', 'fname', 'lname'),)
 
 
 class LeagueHasReferee(models.Model):
     league_name = models.ForeignKey(League, models.CASCADE, related_name='leagueRef_league', db_column='League_name', primary_key=True)  # Field name made lowercase.
     league_district_name = models.ForeignKey(League, models.CASCADE, related_name='leagueRef_district', db_column='League_district_name')  # Field name made lowercase.
     league_state_name = models.ForeignKey(League, models.CASCADE, db_column='League_state_name')  # Field name made lowercase.
-    referee = models.ForeignKey('Referee', models.CASCADE, db_column='Referee_Id', primary_key=True)  # Field name made lowercase.
+    referee = models.ForeignKey('Referee', models.CASCADE, db_column='Referee_Id')  # Field name made lowercase.
 
     class Meta:
         db_table = 'league_has_referee'
@@ -303,12 +304,14 @@ class LeagueHasReferee(models.Model):
 
 
 class Personcontactinfo(models.Model):
-    person = models.ForeignKey(Person, models.CASCADE, db_column='Person_Id', primary_key=True)
+    person = models.ForeignKey(Person, models.CASCADE, db_column='Person_Id')
+    
     email = models.CharField(max_length=50, primary_key=True)
-    phone = models.CharField(max_length=15, primary_key=True)
+    phone = models.CharField(max_length=15)
 
     class Meta:
         db_table = 'personcontactinfo'
+        unique_together = (('person', 'email', 'phone'),)
 
 
 class RefereeTestScores(models.Model):
@@ -324,7 +327,7 @@ class RefereeTestScores(models.Model):
 
 class Sendoffs(models.Model):
     game = models.ForeignKey(Game, models.CASCADE, db_column='Game_Id', primary_key=True)  # Field name made lowercase.
-    player = models.ForeignKey(Player, models.CASCADE, db_column='Player_id', primary_key=True)  # Field name made lowercase.
+    player = models.ForeignKey(Player, models.CASCADE, db_column='Player_id')  # Field name made lowercase.
     reason = models.CharField(db_column='reason', choices=SENDOFF_CHOICES, max_length=10)
     player_number = models.SmallIntegerField(db_column='Player_number')  # Field name made lowercase.
     report = models.TextField()
