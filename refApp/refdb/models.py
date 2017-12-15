@@ -162,14 +162,12 @@ class District(models.Model):
         db_table = 'district'
         unique_together = (('name', 'state_name'),)
 
-class Person(models.Model):
-    id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
+class Person(User):
     fname = models.CharField(db_column='fName', max_length=45)  # Field name made lowercase.
     lname = models.CharField(db_column='lName', max_length=45)  # Field name made lowercase.
     dob = models.DateField(db_column='DOB')  # Field name made lowercase.
     district_name = models.ForeignKey(District, models.SET_NULL, related_name='person_district', db_column='district_name', null=True)
     state_name = models.ForeignKey(District, models.SET_NULL, db_column='State_name', null=True)  # Field name made lowercase.
-    acct = models.ForeignKey(User, models.PROTECT, related_name='+')
 
     class Meta:
         db_table = 'person'

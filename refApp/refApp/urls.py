@@ -30,5 +30,5 @@ urlpatterns = [
     url(r'^stats/', views.stats, name='stats'),
     url(r'^referees/', views.referees, name='referees'),
     url(r'^account/', accounts_views.account, name='account'),
-    url(r'^logout/', accounts_views.logout, name='logout'),
-]
+    url(r'^logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'), ]
+

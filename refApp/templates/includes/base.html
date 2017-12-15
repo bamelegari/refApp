@@ -14,9 +14,10 @@
 					<a class="navbar-brand" href="{% url 'home' %}">Quahog Referee Association</a>
 				</div>
 				<ul class="nav navbar-nav">
-					<li><a href="{% url 'reports' %}">Game Reports</a></li>
 					<li><a href="{% url 'stats' %}">Statistics</a></li>
 					<li><a href="{% url 'referees' %}">Referees</a></li>
+					<li><a href="{% url 'reports' %}">Game Reports</a></li>
+
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
 					<li><a href="{% url 'account' %}"><button class="btn custom-nav-btn "><span class="glyphicon glyphicon-lock" aria-hidden="true"></span> Account</a></li></button>
@@ -26,5 +27,8 @@
 		</nav>
 		{% block content %}
 		{% endblock %}
+	<script src="{% static 'js/jquery-3.2.1.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
 	</body>
 </html>
