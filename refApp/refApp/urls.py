@@ -35,6 +35,6 @@ urlpatterns = [
     url(r'^assign/', views.assign, name='assign'),
     url(r'^assess/', views.assess, name='assess'),
     url(r'^testScores/', views.testscores, name='testScores'),
-    url(r'^addUser/', views.adduser, name='adduser'),
+    url(r'^addUser/', views.adduser, name='addUser'),
     url(r'^denied/', accounts_views.denied, name='denied'),
 ]

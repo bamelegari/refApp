@@ -1,4 +1,5 @@
 {%load static%}<!DOCTYPE html>
+{% load utilityTags %}
 
 <html>
 	<head>
@@ -14,9 +15,15 @@
 					<a class="navbar-brand" href="{% url 'home' %}">Quahog Referee Association</a>
 				</div>
 				<ul class="nav navbar-nav">
+
 					<li><a href="{% url 'stats' %}">Statistics</a></li>
 					<li><a href="{% url 'referees' %}">Referees</a></li>
-					<li><a href="{% url 'reports' %}">Game Reports</a></li>
+					{% if request.user|is_ref%}<li><a href="{% url 'reports' %}">Game Reports</a></li>{% endif %}
+					{% if request.user|is_ref%}<li><a href="{% url 'assignments' %}">Your Assignments</a></li>{% endif %}
+					{% if request.user|is_assignor%}<li><a href="{% url 'assign' %}">Assign Games</a></li>{% endif %}
+					{% if request.user|is_assessor%}<li><a href="{% url 'assess' %}">Submit Assessment</a></li>{% endif %}
+					{% if request.user|is_instructor%}<li><a href="{% url 'testScores' %}">Submit Test Scores</a></li>{% endif %}
+					{% if request.user|is_administrator%}<li><a href="{% url 'addUser' %}">Add User</a></li>{% endif %}
 
 				</ul>
 				<ul class="nav navbar-nav navbar-right">
