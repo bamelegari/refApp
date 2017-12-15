@@ -30,5 +30,11 @@ urlpatterns = [
     url(r'^stats/', views.stats, name='stats'),
     url(r'^referees/', views.referees, name='referees'),
     url(r'^account/', accounts_views.account, name='account'),
-    url(r'^logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'), ]
-
+    url(r'^logout/', auth_views.LogoutView.as_view(template_name='logout.html'), name='logout'),
+    url(r'^assignments/', views.assignments, name='assignments'),
+    url(r'^assign/', views.assign, name='assign'),
+    url(r'^assess/', views.assess, name='assess'),
+    url(r'^testScores/', views.testscores, name='testScores'),
+    url(r'^addUser/', views.adduser, name='adduser'),
+    url(r'^denied/', accounts_views.denied, name='denied'),
+]

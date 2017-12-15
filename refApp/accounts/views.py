@@ -12,6 +12,9 @@ def logout(req):
 def account(req):
 	return HttpResponse('account')
 
+def denied(req):
+	return render(req, 'denied.html')
+
 # def login(req):
 # 	form = loginForm()
 # 	return render(req, 'login.html', {'form': form})

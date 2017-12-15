@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.contrib.auth.models import User
+from django.contrib.auth.models import Group
 
 BOOL_CHOICES = (
     (1, 'yes'),
@@ -183,7 +184,7 @@ class Addresses(models.Model):
         db_table = 'addresses'
 
 
-class Assessor(Person):
+class Assessor(Group):
     good_standing = models.IntegerField(choices=BOOL_CHOICES)
     grade = models.IntegerField()
 
