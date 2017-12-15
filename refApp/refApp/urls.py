@@ -17,8 +17,10 @@ from django.contrib import admin
 from django.conf.urls import url
 
 from refdb import views
+from accounts import views as accounts_views
 
 urlpatterns = [
-	url(r'^$', views.home, name='home'),
+	url(r'^$', accounts_views.login, name='login'),
+	url(r'^home/', views.home, name='home'),
     url(r'^admin/', admin.site.urls),
 ]

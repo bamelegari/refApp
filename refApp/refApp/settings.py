@@ -27,6 +27,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.2']
 
+LOGIN_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
+
 
 # Application definition
 
@@ -38,7 +41,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+	'widget_tweaks',
+
 	'refdb',
+	'accounts',
 ]
 
 MIDDLEWARE = [
@@ -56,7 +62,7 @@ ROOT_URLCONF = 'refApp.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -124,3 +130,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.0/howto/static-files/
 
 STATIC_URL = '/static/'
+
+STATICFILES_DIRS = [
+	os.path.join(BASE_DIR, 'static'),
+
+]
