@@ -183,59 +183,10 @@ class Addresses(models.Model):
     class Meta:
         db_table = 'addresses'
 
-
-class Assessor(Group):
-    good_standing = models.IntegerField(choices=BOOL_CHOICES)
-    grade = models.IntegerField()
-
-    class Meta:
-        db_table = 'assessor'
-
-
-class Assignor(Person):
-    good_standing = models.IntegerField(choices=BOOL_CHOICES)
-    grade = models.IntegerField()
-
-    class Meta:
-
-        db_table = 'assignor'
-
-class Instructor(Person):
-    good_standing = models.IntegerField(choices=BOOL_CHOICES)
-    grade = models.IntegerField()
-
-    class Meta:
-        db_table = 'instructor'
-
-class Referee(Person):
-    grade = models.IntegerField()
-    field_training = models.IntegerField(choices=BOOL_CHOICES)
-    paid = models.IntegerField(choices=BOOL_CHOICES)
-    suspended = models.IntegerField(choices=BOOL_CHOICES)
-    received_badge = models.IntegerField(choices=BOOL_CHOICES)
-    last_certified = models.DateField()
-    last_certifying_instructor = models.ForeignKey(Instructor, models.PROTECT)
-
-    class Meta:
-        db_table = 'referee'
-
-
-class League(models.Model):
-    name = models.CharField(primary_key=True, max_length=50)
-    district_name = models.ForeignKey(District, models.CASCADE, related_name='league_district', db_column='District_name')  # Field name made lowercase.
-    state_name = models.ForeignKey(District, models.CASCADE, db_column='State_name')  # Field name made lowercase.
-    primary_assignor = models.ForeignKey(Assignor, models.SET_NULL, db_column='primary_Assignor_Id', null=True)  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'league'
-        unique_together = (('name', 'district_name', 'state_name'),)
-
-
 class Game(models.Model):
     id = models.AutoField(db_column='Id', primary_key=True)  # Field name made lowercase.
-    league_name = models.ForeignKey('League', models.SET_NULL, db_column='League_name', null=True)  # Field name made lowercase.
-    assignor = models.ForeignKey(Assignor, models.PROTECT, db_column='Assignor_Id')  # Field name made lowercase.
-    assessor = models.ForeignKey(Assessor, models.SET_NULL, db_column='Assessor_Id', blank=True, null=True)  # Field name made lowercase.
+    assignor = models.ForeignKey(Person, models.PROTECT, db_column='id')  # Field name made lowercase.
+    assessor = models.ForeignKey(Person, models.SET_NULL, blank=True, null=True, related_name='Assessor_person', db_column='assessor_id')  # Field name made lowercase.
     assessor_notes = models.TextField(db_column='Assessor_notes', blank=True, null=True)  # Field name made lowercase.
     home_team_name = models.ForeignKey('Team', models.PROTECT, related_name='was_home', db_column='home_Team_name')  # Field name made lowercase.
     visiting_team_name = models.ForeignKey('Team', models.PROTECT, related_name='was_visitor', db_column='visiting_Team_name')  # Field name made lowercase.
@@ -263,7 +214,7 @@ class Cautions(models.Model):
 
 class GameHasReferee(models.Model):
     game = models.ForeignKey(Game, models.PROTECT, db_column='Game_Id', primary_key=True)  # Field name made lowercase.
-    referee = models.ForeignKey('Referee', models.PROTECT, db_column='Referee_Id')  # Field name made lowercase.
+    referee = models.ForeignKey('Person', models.PROTECT, db_column='id')  # Field name made lowercase.
     position = models.CharField(choices=POSITION_CHOICES, max_length=10)
 
     class Meta:
@@ -292,18 +243,6 @@ class Guardians(models.Model):
         db_table = 'guardians'
         unique_together = (('person', 'fname', 'lname'),)
 
-
-class LeagueHasReferee(models.Model):
-    league_name = models.ForeignKey(League, models.CASCADE, related_name='leagueRef_league', db_column='League_name', primary_key=True)  # Field name made lowercase.
-    league_district_name = models.ForeignKey(League, models.CASCADE, related_name='leagueRef_district', db_column='League_district_name')  # Field name made lowercase.
-    league_state_name = models.ForeignKey(League, models.CASCADE, db_column='League_state_name')  # Field name made lowercase.
-    referee = models.ForeignKey('Referee', models.CASCADE, db_column='Referee_Id')  # Field name made lowercase.
-
-    class Meta:
-        db_table = 'league_has_referee'
-        unique_together = (('league_name', 'league_district_name', 'league_state_name', 'referee'),)
-
-
 class Personcontactinfo(models.Model):
     person = models.ForeignKey(Person, models.CASCADE, db_column='Person_Id')
     
@@ -316,7 +255,7 @@ class Personcontactinfo(models.Model):
 
 
 class RefereeTestScores(models.Model):
-    referee_person = models.ForeignKey(Referee, models.CASCADE, db_column='Referee_Person_Id', primary_key=True)  # Field name made lowercase.
+    person = models.ForeignKey(Person, models.CASCADE, db_column='id', primary_key=True)  # Field name made lowercase.
     grade9 = models.IntegerField(blank=True, null=True)
     grade8 = models.IntegerField(blank=True, null=True)
     grade7 = models.IntegerField(blank=True, null=True)

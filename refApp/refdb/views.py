@@ -1,31 +1,31 @@
 from django.shortcuts import render
-from django import template
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.contrib.auth.models import User, Group
 
-register = template.Library()
+from .forms import *
+from .models import *
 
 #def getUserObjectbyName(uname):
 #   return User.objects.get(username=uname)
 
-@register.filter
+
 def is_ref(user):
 	return user.groups.filter(name='referee').exists()
 
-@register.filter
+
 def is_assignor(user):
 	return user.groups.filter(name='assignor').exists()
 
-@register.filter
+
 def is_assessor(user):
 	return user.groups.filter(name='assessor').exists()
 
-@register.filter
+
 def is_instructor(user):
 	return user.groups.filter(name='instructor').exists()
 
-@register.filter
+
 def is_administrator(user):
 	return user.groups.filter(name='administrator').exists()
 
@@ -49,7 +49,7 @@ def referees(req):
 
 @user_passes_test(is_ref, login_url='/denied/', redirect_field_name=None)
 def reports(req):
-	return HttpResponse('reports')
+	return render(req, 'report.html')
 
 @user_passes_test(is_ref, login_url='/denied/', redirect_field_name=None)
 def assignments(req):
@@ -57,7 +57,21 @@ def assignments(req):
 
 @user_passes_test(is_assignor, login_url='/denied/', redirect_field_name=None)
 def assign(req):
-	return HttpResponse('assign')
+	if req.method == 'POST':
+		if 'btn1' in req.POST:
+			form = gameAssignmentForm(req.POST)
+			if form.is_valid():
+				game = form.save()
+				return redirect('assign.html', {'form': refAssignmentForm})
+		else:
+			form = refAssignmentForm(req.POST)
+			if form.is_valid():
+				gameHasReferee = form.save()
+				return render(req, 'assign.html', {'form': gameAssignmentForm})
+
+	else:
+		form = gameAssignmentForm()
+	return render(req, 'assign.html', {'form': form})
 
 @user_passes_test(is_instructor, login_url='/denied/', redirect_field_name=None)
 def testscores(req):

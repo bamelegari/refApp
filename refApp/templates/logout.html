@@ -1,1 +1,9 @@
-logged out
+{% extends 'includes/accountsBase.html' %}
+
+{% load static %}
+
+{% block panel %}
+
+				<h2 class="panel-title">Logged Out</h2>
+				<h3><a href="{% url 'login' %}">return to log in page?</a></h3>
+{% endblock %}

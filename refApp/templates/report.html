@@ -1,11 +1,10 @@
 {% extends 'includes/base.html' %}
-{% load static %}
-{% load i18n %}
+{% load utilityTags %}
 
 {% block content %}
-	<h2>Assign a new game:</h2>
+	<h2>Game Report:</h2>
 
-	<div class="container" style="width: 50%">
+		<div class="container" style="width: 50%">
 		<form method="post" novalidate>
 			{% csrf_token %}
 			{% include 'includes/form.html' %}
