@@ -3,4 +3,13 @@ from django.http import HttpResponse
 
 def home(req):
 
-	return HttpResponse('BOO!')
+	return render(req, 'home.html')
+
+def reports(req):
+	return HttpResponse('reports')
+
+def stats(req):
+	return HttpResponse('stats')
+
+def referees(req):
+	return HttpResponse('referees')

@@ -26,4 +26,9 @@ urlpatterns = [
 	url(r'^login/', auth_views.LoginView.as_view(template_name='login.html'), name='login'),
 	url(r'^home/', views.home, name='home'),
     url(r'^admin/', admin.site.urls),
+    url(r'^reports/', views.reports, name='reports'),
+    url(r'^stats/', views.stats, name='stats'),
+    url(r'^referees/', views.referees, name='referees'),
+    url(r'^account/', accounts_views.account, name='account'),
+    url(r'^logout/', accounts_views.logout, name='logout'),
 ]
